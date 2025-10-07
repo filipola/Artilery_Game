@@ -1,5 +1,5 @@
 from math import sin,cos,radians
-import random
+from random import randint
 
 #TODO: Deal with all TODOs in this file and also remove the TODO and HINT comments.
 
@@ -13,6 +13,8 @@ class Game:
         
         self.cannonSize = cannonSize
         self.ballSize = ballSize
+        self.getCurrentPlayerIndex = 0
+        self.currentWind = randint(-10,10)
 
         self.players = [
             Player(self, False, -90, 'blue'),
@@ -35,19 +37,17 @@ class Game:
 
     """ The current player, i.e. the player whose turn it is """
     def getCurrentPlayer(self):
-        return None #TODO: this is just a dummy value
-
+        return self.players[self.getCurrentPlayerIndex]
     """ The opponent of the current player """
     def getOtherPlayer(self):
-        return None #TODO: this is just a dummy value
-    
+        return self.players[1 - self.getCurrentPlayerIndex]  
     """ The number (0 or 1) of the current player. This should be the position of the current player in getPlayers(). """
     def getCurrentPlayerNumber(self):
-        return 0 #TODO: this is just a dummy value
+        return self.getCurrentPlayerIndex
     
     """ Switch active player """
     def nextPlayer(self):
-        pass #TODO: this should do something instead of nothing
+        self.getCurrentPlayerIndex = 1 - self.getCurrentPlayerIndex
 
     """ Set the current wind speed, only used for testing """
     def setCurrentWind(self, wind):
@@ -55,7 +55,7 @@ class Game:
 
     
     def getCurrentWind(self):
-        return 0 #TODO: this is just a dummy value
+        return self.currentWind
 
     """ Start a new round with a random wind value (-10 to +10) """
     def newRound(self):
