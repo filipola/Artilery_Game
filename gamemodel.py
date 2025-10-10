@@ -68,6 +68,7 @@ class Player:
         self.isReversed = isReversed
         self.xPos = xPos
         self.color = color
+        self.score = 0
    #TODO: You need to create a constructor here. 
    #HINT: It should probably take the Game that creates it as parameter and some additional properties that differ between players (like firing-direction, position and color)
     
@@ -81,14 +82,33 @@ class Player:
 
         self.velocity = velocity
         return Projectile(self.angle,self.velocity, self.game.getCurrentWind(),self.xPos, self.game.getCannonSize() / 2, -110, 110)
+    
+        
+    
+
         # The projectile should start in the middle of the cannon of the firing player
         # HINT: Your job here is to call the constructor of Projectile with all the right values
         # Some are hard-coded, like the boundaries for x-position, others can be found in Game or Player
 
     """ Gives the x-distance from this players cannon to a projectile. If the cannon and the projectile touch (assuming the projectile is on the ground and factoring in both cannon and projectile size) this method should return 0"""
     def projectileDistance(self, proj):
-        ballsize = Game.getBallSize()
-        cannonsize = Game.getCannonSize()
+        ballsize = self.game.getBallSize()
+        cannonsize = self.game.getCannonSize()
+        proj_xPos = proj.getX()
+
+        ball_leftedge = proj_xPos - ballsize
+        ball_rightedge = proj_xPos + ballsize
+
+        cannon_leftedge = (self.xPos - (cannonsize / 2))
+        cannon_rightedge = (self.xPos + (cannonsize / 2))
+
+        if ball_rightedge < cannon_leftedge:
+            return ball_rightedge - cannon_leftedge
+        
+        if ball_leftedge > cannon_rightedge:
+            return ball_leftedge - cannon_rightedge
+        
+        return 0
 
         
 
@@ -102,11 +122,11 @@ class Player:
 
     """ The current score of this player """
     def getScore(self):
-        return 0 #TODO: this is just a dummy value
+        return self.score
 
     """ Increase the score of this player by 1."""
     def increaseScore(self):
-        pass #TODO: this should do something instead of nothing
+        self.score += 1
 
     """ Returns the color of this player (a string)"""
     def getColor(self):
@@ -118,7 +138,7 @@ class Player:
 
     """ The angle and velocity of the last projectile this player fired, initially (45, 40) """
     def getAim(self):
-        return 0, 0 #TODO: this is just a dummy value 
+        return self.angle, self.velocity
 
 
 
