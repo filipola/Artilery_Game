@@ -68,19 +68,21 @@ class Player:
         self.isReversed = isReversed
         self.xPos = xPos
         self.color = color
+        self.angle = 0
         self.score = 0
+        self.velocity = 0
    #TODO: You need to create a constructor here. 
    #HINT: It should probably take the Game that creates it as parameter and some additional properties that differ between players (like firing-direction, position and color)
     
     """ Create and return a projectile starting at the centre of this players cannon. Replaces any previous projectile for this player. """
     def fire(self, angle, velocity):
-        self.angle = angle
         if self.isReversed:
             self.angle = 180 - angle
         else:
-            self.angle
-
+            self.angle = angle
+        
         self.velocity = velocity
+
         return Projectile(self.angle,self.velocity, self.game.getCurrentWind(),self.xPos, self.game.getCannonSize() / 2, -110, 110)
     
         
@@ -103,11 +105,16 @@ class Player:
         cannon_rightedge = (self.xPos + (cannonsize / 2))
 
         if ball_rightedge < cannon_leftedge:
+            print("första")
+            print(ball_rightedge - cannon_leftedge)
             return ball_rightedge - cannon_leftedge
         
         if ball_leftedge > cannon_rightedge:
+            print("andra")
+            print(ball_leftedge - cannon_rightedge)
             return ball_leftedge - cannon_rightedge
         
+        print("träffar")
         return 0
 
         
@@ -149,7 +156,7 @@ class Projectile:
         angle and velocity: the initial angle and velocity of the projectile 
             angle 0 means straight east (positive x-direction) and 90 straight up
         wind: The wind speed value affecting this projectile
-        xPos and yPos: The initial position of this projectile
+        xPos and : The initial position of this projectile
         xLower and xUpper: The lowest and highest x-positions allowed
     """
     def __init__(self, angle, velocity, wind, xPos, yPos, xLower, xUpper):
