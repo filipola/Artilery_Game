@@ -118,11 +118,14 @@ class GameGraphics:
             self.game.nextPlayer()
     
     def explode(self):
-        player = self.game.getCurrentPlayer()
+        current_player = self.game.getCurrentPlayer()
+        other_player = self.game.getOtherPlayer()
+
         ballsize = self.game.getBallSize()
         cannonsize = self.game.getCannonSize()
         for r in range(ballsize,(2*cannonsize)):
-            circle_explode = Circle(Point(player.xPos,(cannonsize/2)),r)
+            circle_explode = Circle(Point(other_player.xPos,(cannonsize/2)),r)
+            circle_explode.setFill(current_player.getColor())
             circle_explode.draw(self.win)
             update(50)
             circle_explode.undraw()
