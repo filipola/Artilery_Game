@@ -6,24 +6,17 @@ class GameGraphics:
     def __init__(self, game):
         self.game = game
 
-        # open the window
         self.win = GraphWin("Cannon game" , 640, 480, autoflush=False)
         self.win.setCoords(-110, -10, 110, 155)
         
-        # draw the terrain
-        # TODO: Draw a line from (-110,0) to (110,0)
         line = Line(Point(-110,0),Point(110,0))
-        line.draw(self.win)
+        line.draw(self.win) # here we create a line a draw it
 
         self.draw_cannons = [self.drawCanon(0), self.drawCanon(1)]
         self.draw_scores  = [self.drawScore(0), self.drawScore(1)]
         self.draw_projs   = [None, None]
 
     def drawCanon(self,playerNr):
-        # draw the cannon
-        # TODO: draw a square with the size of the cannon with the color
-        # and the position of the player with number playerNr.
-        # After the drawing, return the rectangle object.
         cannonsize = self.game.getCannonSize()
         player = self.game.getPlayers()[playerNr]
         cannon_xPos = player.getX()
@@ -32,6 +25,10 @@ class GameGraphics:
         rect.setFill(player.getColor())
         rect.draw(self.win)
         return rect
+    
+        # in this function we take in cannonsize and player from class Game and Player.
+        # with this information we create and draw a square  and fill it with the right color
+        # we return the rectangle
 
     def drawScore(self,playerNr):
         player = self.game.getPlayers()[playerNr]
@@ -39,12 +36,11 @@ class GameGraphics:
         player_score = player.getScore()
         text = Text(Point(cannon_xPos, -5), f'Score: {player_score}')
         text.draw(self.win)
-        # draw the score
-        # TODO: draw the text "Score: X", where X is the number of points
-        # for player number playerNr. The text should be placed under
-        # the corresponding cannon. After the drawing,
-        # return the text object.
         return text
+
+        # here we also take in information from class Game and Player in gamemodel
+        # we create and draw a text that prints player_score
+        # we return the text
 
     def fire(self, angle, vel):
         player = self.game.getCurrentPlayer()
@@ -54,19 +50,20 @@ class GameGraphics:
         circle_Y = proj.getY()
         ballsize = self.game.getBallSize()
 
-        # TODO: If the circle for the projectile for the current player
-        # is not None, undraw it!
-
         currentPlayerNr = self.game.getCurrentPlayerNumber()
         if self.draw_projs[currentPlayerNr] is not None:
             self.draw_projs[currentPlayerNr].undraw()
         if self.draw_projs[1 - currentPlayerNr] is not None:
             self.draw_projs[1 - currentPlayerNr].undraw()
 
+            # if the player hits the cannon we firt undraw the former score
+
         circle = Circle(Point(circle_X,circle_Y),ballsize)
         circle.setFill(player.getColor())
         circle.draw(self.win)
         self.draw_projs[currentPlayerNr] = circle
+
+        # here we draw the circle that moves
 
 
         while proj.isMoving():
@@ -88,6 +85,8 @@ class GameGraphics:
             self.draw_scores[playerNr].undraw()
 
         self.drawScore(playerNr)
+        # here we see if the player hits we undraw the former score
+        # we call the function drawScore which draws the new score
         
     def play(self):
         while True:
@@ -111,7 +110,7 @@ class GameGraphics:
 
             if distance == 0.0:
                 player.increaseScore()
-                self.explode()
+                self.explode() # here we call the function explode
                 self.updateScore(self.game.getCurrentPlayerNumber())
                 self.game.newRound()
 
@@ -129,6 +128,14 @@ class GameGraphics:
             circle_explode.draw(self.win)
             update(50)
             circle_explode.undraw()
+
+            # the function explode takes in current_player, other_player from class Player in gamemodel
+            # and ballsize and cannonsize from class Game in gamemodel
+            # the explosion is a circle that start with the radius ballsize and continues to grow until
+            # its radius is as big as 2 * cannonsize, we do this in a for-loop
+            # in the for loop we draw a circle, fills it with the right color, update(50) sets the speed
+            # and in the end we undraw it just to draw it again later
+            
         
         
 
